@@ -1,0 +1,29 @@
+
+html{
+	background-color: black;
+}
+
+#mongoHead{
+	text-align: center;
+	margin:auto;
+	padding-top: 200px;
+
+}
+
+#nytHead{
+	text-align: center;
+
+}
+div#wrapper{
+	background-image: url("newspaper.jpg");
+	height: 100%;
+	width: 100%;
+	opacity: .3;
+	filter: alpha(opacity=60);
+
+}
+
+div#titleMongo{
+	font-weight: bold;
+	color: #000000;;
+}
