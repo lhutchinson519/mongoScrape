@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default" style="margin:auto;">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Mongo Scraper</a>
@@ -23,16 +23,22 @@
             </ul>
         </div>
     </nav>
-    <div id="wrapper">
-      <div id=titleMongo>
-        <h1 id="mongoHead" style="color: black;">Mongo Scraper</h1>
-        <h2 id="nytHead"><i>New York Times Edition</i></h2>
-      </div>
+    <div class="myDiv">
+        <div id="wrapper" style="height: 600px;">
+            <h1 id="mongoHead" style="color:#ffffff;font-size: 95px;">Mongo Scraper</h1>
+            <h2 id="nytHead" style="color:#ffffff"><i>New York Times Edition</i></h2>
+        </div>
     </div>
-    <div id=result>
-     
+
+    <div id="result">
+      <table id="articlesPost">
+        
+      </table>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

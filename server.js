@@ -19,7 +19,7 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Database configuration
-var databaseUrl = "scraper";
+var databaseUrl = "articles";
 var collections = ["scrapedData"];
 
 // var  articles= require("./models/articles.js");
@@ -36,7 +36,8 @@ db.on("error", function(error) {
     console.log("Database Error:", error);
 });
 
-// Main route (simple Hello World Message)
+
+// Main route
 app.get("/", function(req, res) {
     res.send("index");
 });
@@ -44,7 +45,7 @@ app.get("/", function(req, res) {
 // Retrieve data from the db
 app.get("/all", function(req, res) {
     // Find all results from the scrapedData collection in the db
-    db.scrapedData.find({}, function(error, found) {
+    db.articles.find({}, function(error, found) {
         // Throw any errors to the console
         if (error) {
             console.log(error);
@@ -62,25 +63,49 @@ app.get("/scrape", function(req, res) {
     request("https://www.nytimes.com/", function(error, response, html) {
         // Load the html body from request into cheerio
         var $ = cheerio.load(html);
-        console.log(html);
+        // console.log(html);
 
         var articleobjects = [];
         $("article").each(function(i, element) {
-            // console.log(i);
-            //console.log("headline: " + $(element).text().trim());
-            
-//if no heading or subheader, skip or add to articleobjects array
+
             var headline = $(element).children("h2").text().trim();
             var subheaders = $(element).find("p.summary").text().trim();
 
-            console.log("headline: " + headline);
-            console.log("Subheader: " + subheaders);
+            // console.log("headline: " + headline);
+            // console.log("Subheader: " + subheaders);
+
+            if (headline === true && subheaders === true){
+              articleobjects.push({
+                headline: headline,
+                subheaders: subheaders
+              });
+            };
+
         });
+        console.log("Array: " + articleobjects)
         articleobjects = articleobjects.slice(0,20);
     });
 
     // Send a "Scrape Complete" message to the browser
     res.send("Scrape Complete");
+});
+
+
+// Handle form submission, save submission to mongo
+app.post("/submit", function(req, res) {
+  console.log(req.body);
+  // Insert the note into the notes collection
+  db.notes.insert(req.body, function(error, saved) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Otherwise, send the note back to the browser
+    // This will fire off the success function of the ajax request
+    else {
+      res.send(saved);
+    }
+  });
 });
 
 

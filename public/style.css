@@ -3,10 +3,17 @@ html{
 	background-color: black;
 }
 
+.myDiv {
+    position: relative;
+    z-index: 1;
+    opacity: .9;
+}
+
 #mongoHead{
 	text-align: center;
 	margin:auto;
 	padding-top: 200px;
+	font-size: 60px;
 
 }
 
@@ -14,16 +21,13 @@ html{
 	text-align: center;
 
 }
-div#wrapper{
+.myDiv #wrapper{
+	position: absolute;
+	z-index: -1;
 	background-image: url("newspaper.jpg");
+	 opacity: .4;
+	/*background: rgba(255,255,255,0.5);*/
 	height: 100%;
 	width: 100%;
-	opacity: .3;
-	filter: alpha(opacity=60);
 
-}
-
-div#titleMongo{
-	font-weight: bold;
-	color: #000000;;
 }
