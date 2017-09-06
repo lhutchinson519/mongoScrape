@@ -3,6 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var mongojs = require("mongojs");
 var logger = require("morgan");
+var articleinput = require("models/articles.js")
 // Require request and cheerio. This makes the scraping possible
 var request = require("request");
 var cheerio = require("cheerio");
@@ -74,38 +75,47 @@ app.get("/scrape", function(req, res) {
             // console.log("headline: " + headline);
             // console.log("Subheader: " + subheaders);
 
-            if (headline === true && subheaders === true){
-              articleobjects.push({
-                headline: headline,
-                subheaders: subheaders
-              });
-            };
-
+            if (headline && subheaders) {
+                // Insert the data in the articles db
+                db.articles.insert({
+                    headline: headline,
+                    subheaders: subheaders
+                }, function(err, inserted) {
+                    if (err) {
+                        // Log the error if one is encountered during the query
+                        console.log(err);
+                    } else {
+                        // Otherwise, log the inserted data
+                        console.log(inserted);
+                    }
+                });
+            }
+            // console.log("Array: " + articleobjects)
+            // articleobjects = articleobjects.slice(0, 20);
         });
-        console.log("Array: " + articleobjects)
-        articleobjects = articleobjects.slice(0,20);
-    });
+    })
+};
 
-    // Send a "Scrape Complete" message to the browser
-    res.send("Scrape Complete");
+// Send a "Scrape Complete" message to the browser
+res.send("Scrape Complete");
 });
 
 
 // Handle form submission, save submission to mongo
 app.post("/submit", function(req, res) {
-  console.log(req.body);
-  // Insert the note into the notes collection
-  db.notes.insert(req.body, function(error, saved) {
-    // Log any errors
-    if (error) {
-      console.log(error);
-    }
-    // Otherwise, send the note back to the browser
-    // This will fire off the success function of the ajax request
-    else {
-      res.send(saved);
-    }
-  });
+    console.log(req.body);
+    // Insert the note into the notes collection
+    db.notes.insert(req.body, function(error, saved) {
+        // Log any errors
+        if (error) {
+            console.log(error);
+        }
+        // Otherwise, send the note back to the browser
+        // This will fire off the success function of the ajax request
+        else {
+            res.send(saved);
+        }
+    });
 });
 
 
@@ -113,26 +123,3 @@ app.post("/submit", function(req, res) {
 app.listen(3000, function() {
     console.log("App running on port 3000!");
 });
-
-
-// Save the text and href of each link enclosed in the current element
-// var title = $(element).children("a").text();
-// var link = $(element).children("a").attr("href");
-
-// // If this found element had both a title and a link
-// if (title && link) {
-//   // Insert the data in the scrapedData db
-//   db.scrapedData.insert({
-//     title: title,
-//     link: link
-//   },
-//   function(err, inserted) {
-//     if (err) {
-//       // Log the error if one is encountered during the query
-//       console.log(err);
-//     }
-//     else {
-//       // Otherwise, log the inserted data
-//       console.log(inserted);
-//     }
-//   });
